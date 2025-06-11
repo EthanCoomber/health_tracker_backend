@@ -1,0 +1,567 @@
+openapi: 3.0.0
+info:
+  title: Fitness Tracker API
+  version: 1.0.0
+  description: |
+    API for managing workouts, meals, and user authentication for a fitness tracking application.
+
+    The API is organized into three main routes:
+    * Users route: Managing user authentication and registration
+    * Workouts route: Managing workout sessions and exercises
+    * Meals route: Managing meal tracking and nutrition
+
+servers:
+  - url: http://localhost:8000
+    description: Development server for the Fitness Tracker API.
+
+tags:
+  - name: Users
+    description: Operations related to user authentication and registration
+  - name: Workouts
+    description: Operations related to workout tracking
+  - name: Meals
+    description: Operations related to meal and nutrition tracking
+
+components:
+  responses:
+    BadRequest:
+      description: Bad Request - Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Internal Server Error"
+    Unauthorized:
+      description: Unauthorized - Invalid credentials
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Invalid credentials"
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "679846196243c96505ba4008"
+        username:
+          type: string
+          example: "johndoe"
+        email:
+          type: string
+          example: "john@example.com"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        password:
+          type: string
+          format: password
+          example: "password123"
+
+    SignupRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          example: "johndoe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: "password123"
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    Exercise:
+      type: object
+      properties:
+        exercise:
+          type: string
+          example: "Bench Press"
+        sets:
+          type: integer
+          example: 3
+        reps:
+          type: integer
+          example: 10
+        weight:
+          type: number
+          example: 135.5
+
+    Workout:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "679846196243c96505ba4007"
+        userId:
+          type: string
+          example: "679846196243c96505ba4008"
+        name:
+          type: string
+          example: "Chest Day"
+        description:
+          type: string
+          example: "Focus on chest and triceps"
+        date:
+          type: string
+          format: date
+          example: "2023-05-15"
+        exercises:
+          type: array
+          items:
+            $ref: "#/components/schemas/Exercise"
+
+    WorkoutRequest:
+      type: object
+      required:
+        - userId
+        - name
+        - date
+      properties:
+        userId:
+          type: string
+          example: "679846196243c96505ba4008"
+        name:
+          type: string
+          example: "Chest Day"
+        description:
+          type: string
+          example: "Focus on chest and triceps"
+        date:
+          type: string
+          format: date
+          example: "2023-05-15"
+        exercises:
+          type: array
+          items:
+            $ref: "#/components/schemas/Exercise"
+
+    Meal:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "679846196243c96505ba4009"
+        userId:
+          type: string
+          example: "679846196243c96505ba4008"
+        name:
+          type: string
+          example: "Breakfast"
+        description:
+          type: string
+          example: "Protein-rich breakfast"
+        date:
+          type: string
+          format: date
+          example: "2023-05-15"
+        calories:
+          type: integer
+          example: 450
+        protein:
+          type: number
+          example: 30.5
+        carbs:
+          type: number
+          example: 45.2
+        fat:
+          type: number
+          example: 15.3
+
+    MealRequest:
+      type: object
+      required:
+        - userId
+        - name
+        - date
+      properties:
+        userId:
+          type: string
+          example: "679846196243c96505ba4008"
+        name:
+          type: string
+          example: "Breakfast"
+        description:
+          type: string
+          example: "Protein-rich breakfast"
+        date:
+          type: string
+          format: date
+          example: "2023-05-15"
+        calories:
+          type: integer
+          example: 450
+        protein:
+          type: number
+          example: 30.5
+        carbs:
+          type: number
+          example: 45.2
+        fat:
+          type: number
+          example: 15.3
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Validation failed"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                example: ".body.name"
+              message:
+                type: string
+                example: "must be string"
+              errorCode:
+                type: string
+                example: "type.openapi.validation"
+
+paths:
+  # User Controller Endpoints
+  /user/login:
+    post:
+      tags:
+        - Users
+      summary: Authenticate a user with credentials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: User authenticated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /user/signup:
+    post:
+      tags:
+        - Users
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "200":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          description: User with this email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Workout Controller Endpoints
+  /workouts:
+    get:
+      tags:
+        - Workouts
+      summary: Get all workouts for a user
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4008"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workout"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - Workouts
+      summary: Create a new workout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkoutRequest"
+      responses:
+        "201":
+          description: Workout created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /workouts/{workoutId}:
+    get:
+      tags:
+        - Workouts
+      summary: Get a workout by ID
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4007"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        "404":
+          description: Workout not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      tags:
+        - Workouts
+      summary: Update a workout
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4007"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkoutRequest"
+      responses:
+        "200":
+          description: Workout updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workout"
+        "404":
+          description: Workout not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      tags:
+        - Workouts
+      summary: Delete a workout
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4007"
+      responses:
+        "200":
+          description: Workout deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "404":
+          description: Workout not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  # Meal Controller Endpoints
+  /meals:
+    get:
+      tags:
+        - Meals
+      summary: Get all meals for a user
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4008"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Meal"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - Meals
+      summary: Create a new meal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MealRequest"
+      responses:
+        "201":
+          description: Meal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+  /meals/{mealId}:
+    get:
+      tags:
+        - Meals
+      summary: Get a meal by ID
+      parameters:
+        - name: mealId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4009"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+        "404":
+          description: Meal not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    put:
+      tags:
+        - Meals
+      summary: Update a meal
+      parameters:
+        - name: mealId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4009"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MealRequest"
+      responses:
+        "200":
+          description: Meal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Meal"
+        "404":
+          description: Meal not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      tags:
+        - Meals
+      summary: Delete a meal
+      parameters:
+        - name: mealId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "679846196243c96505ba4009"
+      responses:
+        "200":
+          description: Meal deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        "404":
+          description: Meal not found
+        "500":
+          $ref: "#/components/responses/InternalServerError"
