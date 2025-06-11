@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import WorkoutSchema from "./schema/workouts";
-import { IWorkoutDocument, IWorkoutModel } from "../types/types";
+import WorkoutSchema from "./schema/workouts.ts";
+import type { IWorkoutDocument, IWorkoutModel } from "../types/types.ts";
 
 /**
  * Workout model for the Workout collection

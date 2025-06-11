@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { IUserDocument, IUserModel } from "../../types/types";
+
+
+
+import type { IUserDocument, IUserModel } from "../../types/types.ts";
 
 /**
  * The schema for a document in the Users collection.

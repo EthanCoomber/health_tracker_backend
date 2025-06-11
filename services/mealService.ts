@@ -1,12 +1,12 @@
-import { openai } from "../config/openai";
+import { openai } from "../config/openai.ts";
 
 /**
  * @fileoverview Service module for handling meal-related operations
  * @module services/mealService
  */
 
-import Meal from "../models/meals";
-import { IMeal } from "../types/types";
+import Meal from "../models/meals.ts";
+import type { IMeal } from "../types/types.ts";
 
 /**
  * Fetches all meals for a specific user

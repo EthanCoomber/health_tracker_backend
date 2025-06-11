@@ -3,10 +3,10 @@
  * @module services/userService
  */
 
-import User from "../models/user";
+import User from "../models/user.ts";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { IUser } from "../types/types";
+import type { IUser } from "../types/types.ts";
 
 /**
  * Authenticates a user with provided credentials

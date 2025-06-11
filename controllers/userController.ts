@@ -1,6 +1,6 @@
 // src/controllers/userController.ts
-import { Request, Response } from "express";
-import * as userService from "../services/userService";
+import type { Request, Response } from "express";
+import * as userService from "../services/userService.ts";
 
 /**
  * Controller to handle user login

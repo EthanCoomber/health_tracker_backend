@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import * as workoutService from "../services/workoutService";
+import type { Request, Response } from "express";
+import * as workoutService from "../services/workoutService.ts";
 
 /**
  * Controller to handle workout creation

@@ -1,12 +1,30 @@
-./node_modules
-./dist
-./build
-./coverage
-./logs
-./tmp
-./data
-./config
-./scripts
-./models
-./services
-./controllers
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Test coverage
+coverage/
+
+# Log files
+logs/
+*.log
+
+# OS-specific files
+.DS_Store
+
+# Environment files (important if you use dotenv)
+.env
+
+# Optional runtime generated files
+tmp/
+.cache/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.sublime-workspace
+*.sublime-project

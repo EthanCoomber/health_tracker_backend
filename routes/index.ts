@@ -5,7 +5,9 @@
  */
 
 import { Router } from "express";
-import userController from "../controllers/userController";
+import userController from "../controllers/userController.ts";
+import workoutController from "../controllers/workoutController.ts";
+import mealController from "../controllers/mealController.ts";
 
 const router = Router();
 
@@ -31,5 +33,47 @@ router.post('/user/login', userController.login);
  * @returns {Error} 500 - If an error occurs during registration
  */
 router.post('/user/signup', userController.signup);
+
+// Workout routes
+/**
+ * Create workout
+ * @route POST /workout
+ * @description Creates a new workout record
+ * @param {object} req.body - The workout details
+ * @returns {object} 201 - Newly created workout details
+ * @returns {Error} 400 - If workout data is invalid
+ * @returns {Error} 500 - If an error occurs during creation
+ */
+router.post('/workout', workoutController.createWorkout);
+
+/**
+ * Get all workouts
+ * @route GET /workout
+ * @description Retrieves all workouts for the authenticated user
+ * @returns {object} 200 - Array of workout records
+ * @returns {Error} 500 - If an error occurs during retrieval
+ */
+router.get('/workout', workoutController.getAllWorkouts);
+
+// Meal routes
+/**
+ * Create meal
+ * @route POST /meal
+ * @description Creates a new meal record
+ * @param {object} req.body - The meal details
+ * @returns {object} 201 - Newly created meal details
+ * @returns {Error} 400 - If meal data is invalid
+ * @returns {Error} 500 - If an error occurs during creation
+ */
+router.post('/meal', mealController.createMeal);
+
+/**
+ * Get all meals
+ * @route GET /meal
+ * @description Retrieves all meals for the authenticated user
+ * @returns {object} 200 - Array of meal records
+ * @returns {Error} 500 - If an error occurs during retrieval
+ */
+router.get('/meal', mealController.getAllMeals);
 
 export default router;

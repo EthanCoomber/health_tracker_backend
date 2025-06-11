@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IMealDocument, IMealModel, IMeal } from "../../types/types";
+import type { IMealDocument, IMealModel, IMeal } from "../../types/types.ts";
 
 /**
  * The schema for a document in the Meals collection.

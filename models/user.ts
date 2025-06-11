@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import UserSchema from "./schema/user";
-import { IUserDocument, IUserModel } from "../types/types";
+import UserSchema from "./schema/user.ts";
+import type { IUserDocument, IUserModel } from "../types/types.ts";
 
 /**
  * User model for the User collection

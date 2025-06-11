@@ -171,3 +171,5 @@ export interface IMealModel extends mongoose.Model<IMealDocument> {
   updateMeal(mealId: string, mealData: Partial<IMeal>): Promise<IMealDocument | null>;
   deleteMeal(mealId: string): Promise<boolean>;
 }
+
+

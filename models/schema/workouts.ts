@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IWorkoutDocument, IWorkoutModel, IWorkout } from "../../types/types";
+import type { IWorkoutDocument, IWorkoutModel, IWorkout } from "../../types/types.ts";
 
 /**
  * The schema for a document in the Workouts collection.

@@ -1,12 +1,12 @@
-import { openai } from "../config/openai";
+import { openai } from "../config/openai.ts";
 
 /**
  * @fileoverview Service module for handling workout-related operations
  * @module services/workoutService
  */
 
-import Workout from "../models/workouts";
-import { IWorkout } from "../types/types";
+import Workout from "../models/workouts.ts";
+import type { IWorkout } from "../types/types.ts";
 
 /**
  * Fetches all workouts for a specific user

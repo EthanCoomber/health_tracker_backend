@@ -6,7 +6,8 @@ import { middleware as openApiValidator } from "express-openapi-validator";
 import yaml from "yaml";
 import fs from "fs";
 import path from "path";
-import { IError } from "../types/types";
+import { fileURLToPath } from "url";
+import type { IError } from "../types/types.ts";
 
 /**
  * Sets up middleware for the Express application
@@ -31,11 +32,15 @@ export const setupMiddleware = (app: express.Express): void => {
   );
   app.use(express.json());
 
+  // Get the directory name using ES modules
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  
   const openApiPath = path.join(__dirname, "../openapi.yaml");
   const openApiDocument = yaml.parse(fs.readFileSync(openApiPath, "utf8"));
 
   const swaggerOptions = {
-    customSiteTitle: "Fake Stack Overflow API Documentation",
+    customSiteTitle: "Health Tracker API Documentation",
     customCss: '.swagger-ui .topbar { display: none } .swagger-ui .info { margin: 20px 0 } .swagger-ui .scheme-container { display: none }',
     swaggerOptions: {
       displayRequestDuration: true,

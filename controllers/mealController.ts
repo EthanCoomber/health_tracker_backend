@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import * as mealService from "../services/mealService";
+import type { Request, Response } from "express";
+import * as mealService from "../services/mealService.ts";
 
 /**
  * Controller to handle meal creation

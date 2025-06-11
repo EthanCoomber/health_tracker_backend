@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import MealSchema from "./schema/meals";
-import { IMealDocument, IMealModel } from "../types/types";
+import MealSchema from "./schema/meals.ts";
+import type { IMealDocument, IMealModel } from "../types/types.ts";
 
 /**
  * Meal model for the Meal collection
